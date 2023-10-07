@@ -1,0 +1,10 @@
+f=open("cse.txt",'r')
+print(f.read())
+f.close()
+f=open("cs.txt",'r')
+print(f.read())
+f.close()
+l=("computer science and engineering")
+tuple=tuple(l)
+print(tuple)
+
