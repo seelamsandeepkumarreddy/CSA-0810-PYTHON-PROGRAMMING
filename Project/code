@@ -1,1 +1,56 @@
+import cv2
+import numpy as np
+
+# Define HSV ranges for different colors
+color_ranges = {
+    1: {'name': 'blue', 'lower': np.array([110, 50, 50]), 'upper': np.array([130, 255, 255])},
+    2: {'name': 'red', 'lower': np.array([0, 50, 50]), 'upper': np.array([10, 255, 255])},
+    3: {'name': 'yellow', 'lower': np.array([20, 100, 100]), 'upper': np.array([30, 255, 255])},
+    4: {'name': 'pink', 'lower': np.array([140, 100, 100]), 'upper': np.array([170, 255, 255])},
+    5: {'name': 'green', 'lower': np.array([40, 50, 50]), 'upper': np.array([80, 255, 255])},
+    6: {'name': 'sky_blue', 'lower': np.array([90, 50, 50]), 'upper': np.array([120, 255, 255])},
+    # Add more color ranges as needed
+}
+
+
+def color_detection(image_path, user_color_choice):
+    # Read the image
+    image = cv2.imread(image_path)
+
+    # Convert the image to HSV color space
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    # Get the HSV range for the selected color
+    selected_color = color_ranges.get(int(user_color_choice))
+    if selected_color is None:
+        print(f"Color '{user_color_choice}' not recognized.")
+        return
+
+    lower_bound = selected_color['lower']
+    upper_bound = selected_color['upper']
+
+    # Define a mask using the selected color range
+    mask = cv2.inRange(hsv_image, lower_bound, upper_bound)
+
+    # Bitwise AND operation to extract the color region
+    color_region = cv2.bitwise_and(image, image, mask=mask)
+
+    # Display the original and color-detected images
+    cv2.imshow('Original Image', image)
+    cv2.imshow('Color Detection', color_region)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+
+# Example: Detecting color based on user input in the provided image
+image_path = r'C:\Users\student\Pictures\python programs\gettyimages-1248542684-612x612.jpg'
+
+# Display the color choices
+print("Color Choices:")
+for key, value in color_ranges.items():
+    print(f"{key}. {value['name']}")
+
+# Get user input for the color choice
+user_color_choice = input("Enter the number corresponding to the color you want to detect: ")
+color_detection(image_path, user_color_choice)
 
